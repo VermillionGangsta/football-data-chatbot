@@ -1,11 +1,9 @@
-# Football Data Chatbot ⚽
+# Football Data Chatbot 
 
 ## Overview
 This project focuses on building a data-aware chatbot that can answer natural language
 questions using football data from the last 10 years.
 
-The goal is to explore how structured sports data can be queried and summarized
-using simple data processing pipelines and, later, large language models.
 
 ## Dataset
 The data is sourced from Kaggle and contains historical football information across
@@ -47,6 +45,4 @@ The repository currently contains:
 - Build a simple chatbot interface on top of the data layer
 - Incrementally document progress in this repository
 
-## Motivation
-This project is part of a learning exercise to understand how data-driven systems
-can be combined with natural language interfaces, particularly in the sports analytics domain.
+
