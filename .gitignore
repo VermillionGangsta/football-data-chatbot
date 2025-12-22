@@ -1,1 +1,5 @@
-data/*.csv
+# macOS junk
+.DS_Store
+
+# Ignore all local data and generated files
+data/
