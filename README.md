@@ -1,94 +1,86 @@
 # Football Data Chatbot
 
 ## Overview
-This project focuses on building a data-aware chatbot that can answer natural language questions using football data from the last 10 years. The primary goal is to understand how large language models (LLMs) can be connected to real, structured sports data and what kind of data preparation is required for them to produce meaningful and grounded responses.
+This project explores how to build a data-aware chatbot over real-world football data from the last 10 years. The focus so far has been on understanding how large language models (LLMs) interact with structured data and what kind of data preparation and system design is required before a chatbot can answer questions reliably.
 
-At this stage, the focus is on setting up a basic framework for building such a chatbot and exploring how structured football datasets can be made usable for LLM-based querying.
+Rather than starting directly with a UI or answer generation, the project prioritizes building a clean data ingestion and retrieval pipeline that can later be extended into a full chatbot.
 
 ---
 
 ## Dataset
-The data is sourced from Kaggle and contains historical football information across multiple leagues and competitions.
+The data is sourced from Kaggle and consists of multiple structured CSV files covering different aspects of football data:
 
-Included datasets:
-- `players.csv` – player metadata  
-- `clubs.csv` – club information  
-- `games.csv` – match-level data  
-- `appearances.csv` – player appearances per match  
-- `player_valuations.csv` – player market value history  
-- `competitions.csv` – competition metadata  
+- `players.csv` – player metadata (name, position, nationality, date of birth)
+- `games.csv` – match-level information (teams, date, competition, score)
+- `clubs.csv` – club metadata
+- `appearances.csv` – player appearances per match
+- `player_valuations.csv` – historical player market values
+- `competitions.csv` – competition and league metadata
 
-These datasets are relational and fairly large, which makes them realistic but also challenging to work with in the context of LLMs.
+These datasets are relational and fairly large, which makes them realistic but also challenging to work with directly using LLMs.
 
-**Note:** Raw CSV files are not stored in this repository due to GitHub file size limits. They can be downloaded separately and placed inside the `data/` directory locally.
+**Note:** Raw CSV files are not included in the repository due to size constraints and are expected to be placed locally in the `data/` directory.
 
 ---
 
-## What I’m Learning
+## Key Learnings So Far
 
 ### Working with structured data and LLMs
-One of the first things I am learning through this project is that LLMs cannot directly reason over large CSV files in a reliable way. While they can understand small tabular examples, they are not designed to ingest or operate over thousands of structured rows, joins, or filters.
+One of the first insights from this project is that LLMs cannot directly reason over large CSV files in a reliable way. While they can understand small tabular examples, they are not designed to ingest thousands of structured rows, perform joins, or handle large-scale filtering.
 
-This means that some form of data transformation is required before the data can be used effectively in a chatbot setting.
-
----
-
-### Converting structured rows into football facts
-To address this, I am exploring the idea of converting structured rows into short, human-readable football facts. Instead of passing raw tables to the model, each row (or small group of rows) is transformed into a sentence or short paragraph describing something meaningful, such as a player appearance, a match result, or a club’s participation in a competition.
-
-This approach makes the data:
-- Easier for language models to understand
-- Suitable for semantic search using embeddings
-- More flexible for natural language queries
-
-This conversion process is an important part of the project and is being developed iteratively.
+This makes it necessary to transform structured data into a format that is more compatible with language models.
 
 ---
 
-## Planned Approach
-The chatbot will be built using a retrieval-based framework:
+### Converting rows into human-readable football facts
+To bridge this gap, the project converts structured rows into short, human-readable football facts. For example:
+- A player row becomes a sentence describing the player’s position, nationality, and birth date
+- A match row becomes a sentence describing the teams, competition, date, and final score
 
-1. Football datasets are loaded and filtered to the last 10 years.
-2. Structured rows are converted into short, readable football facts.
-3. These facts are embedded and stored in a vector database.
-4. User queries retrieve the most relevant facts.
-5. A language model generates answers based only on the retrieved data.
+This representation makes the data:
+- Easier for embeddings to capture semantic meaning
+- Searchable using vector similarity
+- Suitable for retrieval-based question answering
 
-The initial implementation will focus on correctness and clarity rather than completeness.
+This transformation step is a core part of the project.
 
 ---
 
+## Current Architecture
+The system currently follows a retrieval-first design:
+
+1. Load structured football datasets (players, games)
+2. Convert rows into textual football facts
+3. Store these facts locally
+4. Generate embeddings for the facts using a local embedding model
+5. Index embeddings using a FAISS vector store
+6. Retrieve relevant facts for a given natural language query
+
+Answer generation and UI layers are intentionally deferred until the retrieval pipeline is solid.
+
+---
 ## Project Structure
 football-data-chatbot/
-├── data/ # Local CSV files (ignored by git)
-├── app/ # Data ingestion and chatbot logic (in progress)
-├── docs/ # Development notes and progress logs
-├── README.md # Project documentation
+├── data/ # Local CSV files and generated artifacts (ignored by git)
+├── app/
+│ ├── ingest.py # CSV → football facts
+│ ├── vector_store.py # Embedding + FAISS index creation
+├── README.md
 
 
 ---
 
 ## Current Status
-- Football datasets identified and explored
-- Project structure and basic framework set up
-- Initial understanding developed around how to adapt structured data for LLM-based querying
-
----
-
-## Progress Log
-
-### Day 1
-- Explored the structure and scale of football datasets from the last 10 years
-- Identified challenges with using large CSV files directly with LLMs
-- Set up the repository structure and documentation
-- Defined a basic framework for building a retrieval-based football chatbot
+- Explored and understood multi-table football datasets
+- Built an ingestion pipeline for players and games data
+- Converted structured rows into human-readable football facts
+- Created a local embedding-based vector store using FAISS
+- Validated semantic retrieval over football data
 
 ---
 
 ## Next Steps
-- Load and preprocess selected datasets using Python
-- Implement the conversion of structured rows into textual football facts
-- Build a small-scale retrieval-based prototype using embeddings
-- Extend coverage to additional datasets once the core pipeline is working
+- I have to make a streamlit UI for interaction where I can interact with different queries
+
 
 
